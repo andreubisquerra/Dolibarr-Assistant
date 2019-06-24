@@ -77,22 +77,36 @@ $formfile = new FormFile($db);
 
 llxHeader("", $langs->trans("Dolibarr Assistant"));
 
-print load_fiche_titre($langs->trans("Dolibarr Assistant"), '', 'dolibarrassistant.png@dolibarrassistant');
+?>
+<style>
+.div1{
+	height: 500px;
+	width: 350px;
+	float: left;
+	text-align: center;
+	box-sizing: border-box;
+	overflow: auto;
+	/* background-color:white; */
+
+}
+</style>
+<?php
+
+//print load_fiche_titre($langs->trans("Dolibarr Assistant"), '', 'dolibarrassistant.png@dolibarrassistant');
 
 print '<div class="fichecenter"><div class="fichethirdleft">';
 ?>
 <script>
-function deleteline() {
-	var place=1;
-	$("#poslines").load("chat.php?action=deleteline&place="+place, function() {
+function sendtochat() {
+	$("#poslines").load("chat.php?text="+$("#usertext").val(), function() {
 		//$('#poslines').scrollTop($('#poslines')[0].scrollHeight);
 	});
 }
 </script>
 <div id="poslines" class="div1">
 </div>
-
-<button onclick="deleteline();">asdf</button>
+<div class="fichecenter"><div class="fichethirdleft">
+<input type="text" id="usertext"><button onclick="sendtochat();">asdf</button>
 <?php		
 print '</div><div class="fichetwothirdright"><div class="ficheaddleft">';
 
