@@ -40,12 +40,26 @@ $langs->loadLangs(array("dolibarrassistant@dolibarrassistant"));
 $id = GETPOST('id', 'int');
 $action = GETPOST('action', 'alpha');
 $text = GETPOST('text', 'alpha');
-$place = (GETPOST('place', 'int') > 0 ? GETPOST('place', 'int') : 0);   // $place is id of table for Ba or Restaurant
+
+
+// Retrieve last conversation
+$sql = "SELECT max(conversation_id) FROM ".MAIN_DB_PREFIX."dolibarrassistant_conversation";
+$resql = $db->query($sql);
+$values = $db->fetch_array($resql);
+$conversation_id=$values[0];
+echo "conv".$conversation_id;
+if ($conversation_id<1)
+{
+	$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_conversation VALUES (NULL, '1', 'wellcome', CURRENT_TIMESTAMP, NULL, NULL, '1');";
+	$resql = $db->query($sql);
+	$conversation_id=1;
+}
 
 /*
  * Actions
  */
 
+ 
 
  
  /*

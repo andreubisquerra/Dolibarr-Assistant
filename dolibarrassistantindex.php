@@ -97,6 +97,9 @@ llxHeader("", $langs->trans("Dolibarr Assistant"));
 print '<div class="fichecenter"><div class="fichethirdleft">';
 ?>
 <script>
+$( document ).ready(function() {
+    sendtochat();
+});
 function sendtochat() {
 	$("#poslines").load("chat.php?text="+$("#usertext").val(), function() {
 		//$('#poslines').scrollTop($('#poslines')[0].scrollHeight);
