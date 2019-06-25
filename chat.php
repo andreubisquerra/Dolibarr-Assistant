@@ -251,7 +251,24 @@ EDIT ON
       </div>
     </li>
 	
-	
+	<?php
+	$sql="SELECT * FROM ".MAIN_DB_PREFIX."dolibarrassistant_messages where fk_conversation=".$conversation_id;
+    $resql = $db->query($sql);
+    $rows = array();
+    while($row = $db->fetch_array($resql)){
+        //$rows[] = $row;
+		echo '
+		<li class="self">
+			<div class="avatar">
+				<img src="../../public/theme/common/user_anonymous.png" />
+			</div>
+			<div class="messages">
+				<p>'.$row[2].'</p>
+			</div>
+		</li>
+		';
+    }
+	?>
 	
     <li class="self">
       <div class="avatar">
