@@ -101,7 +101,7 @@ $( document ).ready(function() {
     sendtochat();
 });
 function sendtochat() {
-	$("#poslines").load("chat.php?text="+$("#usertext").val(), function() {
+	$("#poslines").load(encodeURI("chat.php?text="+$("#usertext").val()), function() {
 		//$('#poslines').scrollTop($('#poslines')[0].scrollHeight);
 	});
 }

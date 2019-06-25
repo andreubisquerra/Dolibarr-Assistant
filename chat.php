@@ -35,11 +35,12 @@ if (!defined('NOREQUIREAJAX'))  { define('NOREQUIREAJAX', '1'); }
 require '../../main.inc.php';
 
 //$langs->loadLangs(array("bills", "cashdesk"));
-$langs->loadLangs(array("dolibarrassistant@dolibarrassistant"));
+$langs->loadLangs(array("bills", "dolibarrassistant@dolibarrassistant"));
 
 $id = GETPOST('id', 'int');
 $action = GETPOST('action', 'alpha');
 $text = GETPOST('text', 'alpha');
+$text=urldecode($text);
 
 
 // Retrieve opened conversation
@@ -48,6 +49,7 @@ $resql = $db->query($sql);
 if($resql){
 	$obj = $db->fetch_object($resql);
 	$conversation_id=$obj->rowid;
+	$conversation_subject=$obj->subject;
 }
 // Create new one if necesary
 if ($conversation_id<1)
@@ -69,8 +71,18 @@ if ($conversation_id<1)
 if ($text!="")
 {
 	$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_messages VALUES (NULL, $conversation_id, '$text', 0);";
-	echo $sql;
 	$resql = $db->query($sql);
+	
+	// If subject not started
+	if ($conversation_subject=="")
+	{
+		if (strpos($text, $langs->trans('CreateBill')) !== false)
+		{
+			$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_messages VALUES (NULL, $conversation_id, '".$langs->trans('WhatCustomer')."', 1);";
+			$resql = $db->query($sql);
+		}
+	}
+	
 }
 
 /*
@@ -258,7 +270,10 @@ EDIT ON
     while($row = $db->fetch_array($resql)){
         //$rows[] = $row;
 		echo '
-		<li class="self">
+		<li class="';
+		if ($row[3]==0) echo 'self';
+		if ($row[3]==1) echo 'other';
+		echo '">
 			<div class="avatar">
 				<img src="../../public/theme/common/user_anonymous.png" />
 			</div>
