@@ -42,17 +42,35 @@ $action = GETPOST('action', 'alpha');
 $text = GETPOST('text', 'alpha');
 
 
-// Retrieve last conversation
-$sql = "SELECT max(conversation_id) FROM ".MAIN_DB_PREFIX."dolibarrassistant_conversation";
+// Retrieve opened conversation
+$sql = "SELECT * FROM ".MAIN_DB_PREFIX."dolibarrassistant_conversation WHERE finished=0";
 $resql = $db->query($sql);
-$values = $db->fetch_array($resql);
-$conversation_id=$values[0];
-echo "conv".$conversation_id;
+if($resql){
+	$obj = $db->fetch_object($resql);
+	$conversation_id=$obj->rowid;
+}
+// Create new one if necesary
 if ($conversation_id<1)
 {
-	$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_conversation VALUES (NULL, '1', 'wellcome', CURRENT_TIMESTAMP, NULL, NULL, '1');";
+	$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_conversation VALUES (NULL, NULL, '', 0);";
 	$resql = $db->query($sql);
 	$conversation_id=1;
+	
+	// Retrieve created conversation
+	$sql = "SELECT * FROM ".MAIN_DB_PREFIX."dolibarrassistant_conversation WHERE finished=0";
+	$resql = $db->query($sql);
+	if($resql){
+		$obj = $db->fetch_object($resql);
+		$conversation_id=$obj->rowid;
+	}
+}
+
+// If text writted add to conversation
+if ($text!="")
+{
+	$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_messages VALUES (NULL, $conversation_id, '$text', 0);";
+	echo $sql;
+	$resql = $db->query($sql);
 }
 
 /*
@@ -232,6 +250,9 @@ EDIT ON
         <p><?php echo $langs->trans("IamAssistant", $user->login);?></p>
       </div>
     </li>
+	
+	
+	
     <li class="self">
       <div class="avatar">
         <img src="../../public/theme/common/user_anonymous.png" />

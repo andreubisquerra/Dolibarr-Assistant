@@ -14,14 +14,9 @@
 -- along with this program.  If not, see http://www.gnu.org/licenses/.
 
 
-CREATE TABLE llx_dolibarrassistant_assistantlog(
-	-- BEGIN MODULEBUILDER FIELDS
+CREATE TABLE llx_dolibarrassistant_conversation(
 	rowid integer AUTO_INCREMENT PRIMARY KEY NOT NULL, 
-	description text, 
-	date_creation datetime NOT NULL, 
-	tms timestamp, 
-	fk_user_creat integer NOT NULL, 
-	import_key varchar(14), 
-	subject varchar(255)
-	-- END MODULEBUILDER FIELDS
+	fk_user integer,
+	subject varchar(255),	
+	finished integer
 ) ENGINE=innodb;
