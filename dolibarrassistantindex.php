@@ -81,7 +81,7 @@ llxHeader("", $langs->trans("Dolibarr Assistant"));
 <style>
 .div1{
 	height: 500px;
-	width: 350px;
+	width: 320px;
 	float: left;
 	text-align: center;
 	box-sizing: border-box;
@@ -101,16 +101,20 @@ $( document ).ready(function() {
     sendtochat();
 });
 function sendtochat() {
-	$("#poslines").load(encodeURI("chat.php?text="+$("#usertext").val()), function() {
-		//$('#poslines').scrollTop($('#poslines')[0].scrollHeight);
+	$("#poslines").load(encodeURI("chat.php?text="+$("#search_usertext").val()), function() {
+		$('#poslines').scrollTop($('#poslines')[0].scrollHeight);
 	});
 }
 </script>
 <div id="poslines" class="div1">
 </div>
 <div class="fichecenter"><div class="fichethirdleft">
-<input type="text" id="usertext"><button onclick="sendtochat();">asdf</button>
-<?php		
+<?php
+$htmlname="usertext";
+$name="";
+print '<input type="text" size="38" id="search_'.$htmlname.'" name="search_'.$htmlname.'" value="'.$name.'" />';
+print ajax_autocompleter(0, $htmlname, 'ajax.php', '', 2, 0);
+print '<button onclick="sendtochat();">'.$langs->trans("OK").'</button>';
 print '</div><div class="fichetwothirdright"><div class="ficheaddleft">';
 
 

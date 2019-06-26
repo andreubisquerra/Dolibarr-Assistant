@@ -285,55 +285,6 @@ EDIT ON
     }
 	?>
 	
-    <li class="self">
-      <div class="avatar">
-        <img src="../../public/theme/common/user_anonymous.png" />
-      </div>
-      <div class="messages">
-        <p><?php echo $text;?></p>
-        <p>It's a pretty small airport.</p>
-        <time datetime="2009-11-13T20:14">37 mins</time>
-      </div>
-    </li>
-    <li class="other">
-      <div class="avatar">
-        <img src="../../favicon.ico" />
-      </div>
-      <div class="messages">
-        <p>that mongodb thing looks good, huh?</p>
-        <p>
-          tiny master db, and huge document store</p>
-      </div>
-    </li>
-	<li class="other">
-      <div class="avatar">
-        <img src="../../favicon.ico" />
-      </div>
-      <div class="messages">
-        <p>yeah, they do early flights cause they connect with big airports.  they wanna get u to your connection</p>
-        <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
-      </div>
-    </li>
-    <li class="self">
-      <div class="avatar">
-        <img src="../../public/theme/common/user_anonymous.png" />
-      </div>
-      <div class="messages">
-        <p>That makes sense.</p>
-        <p>It's a pretty small airport.</p>
-        <time datetime="2009-11-13T20:14">37 mins</time>
-      </div>
-    </li>
-    <li class="other">
-      <div class="avatar">
-        <img src="../../favicon.ico" />
-      </div>
-      <div class="messages">
-        <p>that mongodb thing looks good, huh?</p>
-        <p>
-          tiny master db, and huge document store</p>
-      </div>
-    </li>
   </ol>
   
 </section>
