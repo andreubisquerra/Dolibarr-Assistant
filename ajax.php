@@ -48,13 +48,86 @@ top_httphead();
 
 dol_syslog(join(',', $_GET));
 
-$return_arr = array();
+// Retrieve opened conversation
+$sql = "SELECT * FROM ".MAIN_DB_PREFIX."dolibarrassistant_conversation WHERE finished=0";
+$resql = $db->query($sql);
+if($resql){
+	$obj = $db->fetch_object($resql);
+	$conversation_subject=$obj->subject;
+}
 
-			$row_array['label'] = "Crear factura";
-			$row_array['value'] = "Crear factura";
-	        $row_array['key'] = 1;
+if ($conversation_subject=="")
+{
+	$return_arr = array();
+	$row_array['label'] = "Crear factura";
+	$row_array['value'] = "Crear factura";
+	$row_array['key'] = 1;
+
+	array_push($return_arr, $row_array);
+	echo json_encode($return_arr);
+}
+
+
+
+
+
+
+
+else if ($conversation_subject=="CreateBill")
+{
+	
+	$return_arr = array();
+
+	// Define filter on text typed
+	$socid = $_GET['newcompany']?$_GET['newcompany']:'';
+	if (! $socid) $socid = $_GET['socid']?$_GET['socid']:'';
+	if (! $socid) $socid = $_GET['id_fourn']?$_GET['id_fourn']:'';
+
+	$sql = "SELECT rowid, nom";
+	$sql.= " FROM ".MAIN_DB_PREFIX."societe as s";
+	$sql.= " WHERE s.entity IN (".getEntity('societe').")";
+	if ($socid)
+	{
+        $sql.=" AND (";
+        // Add criteria on name/code
+        if (! empty($conf->global->COMPANY_DONOTSEARCH_ANYWHERE))   // Can use index
+        {
+            $sql.="nom LIKE '" . $db->escape($socid) . "%'";
+            $sql.=" OR code_client LIKE '" . $db->escape($socid) . "%'";
+            $sql.=" OR code_fournisseur LIKE '" . $db->escape($socid) . "%'";
+        }
+        else
+        {
+    		$sql.="nom LIKE '%" . $db->escape($socid) . "%'";
+    		$sql.=" OR code_client LIKE '%" . $db->escape($socid) . "%'";
+    		$sql.=" OR code_fournisseur LIKE '%" . $db->escape($socid) . "%'";
+        }
+		if (! empty($conf->global->SOCIETE_ALLOW_SEARCH_ON_ROWID)) $sql.=" OR rowid = '" . $db->escape($socid) . "'";
+		$sql.=")";
+	}
+	//if (GETPOST("filter")) $sql.= " AND (".GETPOST("filter", "alpha").")"; // Add other filters
+	$sql.= " ORDER BY nom ASC";
+
+	//dol_syslog("ajaxcompanies", LOG_DEBUG);
+	$resql=$db->query($sql);
+	if ($resql)
+	{
+		while ($row = $db->fetch_array($resql))
+		{
+		    $label=$row['nom'];
+		    if ($socid) $label=preg_replace('/('.preg_quote($socid, '/').')/i', '<strong>$1</strong>', $label, 1);
+			$row_array['label'] = $label;
+			$row_array['value'] = $row['nom'];
+	        $row_array['key'] = $row['rowid'];
 
 	        array_push($return_arr, $row_array);
+	    }
 
 	    echo json_encode($return_arr);
+	}
+	else
+	{
+	    echo json_encode(array('nom'=>'Error','label'=>'Error','key'=>'Error','value'=>'Error'));
+	}	
+}
 	

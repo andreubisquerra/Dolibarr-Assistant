@@ -67,7 +67,7 @@ if ($conversation_id<1)
 	}
 }
 
-// If text writted add to conversation
+// If text writted, add to conversation
 if ($text!="")
 {
 	$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_messages VALUES (NULL, $conversation_id, '$text', 0);";
@@ -80,8 +80,11 @@ if ($text!="")
 		{
 			$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_messages VALUES (NULL, $conversation_id, '".$langs->trans('WhatCustomer')."', 1);";
 			$resql = $db->query($sql);
+			$sql = "UPDATE ".MAIN_DB_PREFIX."dolibarrassistant_conversation SET subject='CreateBill'";
+			$resql = $db->query($sql);
 		}
 	}
+	
 	
 }
 
@@ -274,8 +277,10 @@ EDIT ON
 		if ($row[3]==0) echo 'self';
 		if ($row[3]==1) echo 'other';
 		echo '">
-			<div class="avatar">
-				<img src="../../public/theme/common/user_anonymous.png" />
+			<div class="avatar">';
+			if ($row[3]==0) echo '<img src="../../public/theme/common/user_anonymous.png" />';
+			if ($row[3]==1) echo '<img src="../../favicon.ico" />';
+			echo '
 			</div>
 			<div class="messages">
 				<p>'.$row[2].'</p>
