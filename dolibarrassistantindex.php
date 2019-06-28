@@ -103,6 +103,8 @@ $( document ).ready(function() {
 function sendtochat() {
 	$("#poslines").load(encodeURI("chat.php?text="+$("#search_usertext").val()), function() {
 		$('#poslines').scrollTop($('#poslines')[0].scrollHeight);
+		$("#search_usertext").val('');
+		$("#search_usertext").focus();
 	});
 }
 </script>

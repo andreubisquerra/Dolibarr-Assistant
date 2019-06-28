@@ -68,7 +68,7 @@ if ($conversation_id<1)
 }
 
 // If text writted, add to conversation
-if ($text!="")
+if ($text!="" and $text!="reset")
 {
 	$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_messages VALUES (NULL, $conversation_id, '$text', 0);";
 	$resql = $db->query($sql);
@@ -80,12 +80,32 @@ if ($text!="")
 		{
 			$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_messages VALUES (NULL, $conversation_id, '".$langs->trans('WhatCustomer')."', 1);";
 			$resql = $db->query($sql);
-			$sql = "UPDATE ".MAIN_DB_PREFIX."dolibarrassistant_conversation SET subject='CreateBill'";
+			$sql = "UPDATE ".MAIN_DB_PREFIX."dolibarrassistant_conversation SET subject='CreateBill' where rowid=$conversation_id";
 			$resql = $db->query($sql);
 		}
 	}
+	else if ($conversation_subject=='CreateBill')
+	{
+		$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_messages VALUES (NULL, $conversation_id, '".$langs->trans('WhatProduct')."', 1);";
+		$resql = $db->query($sql);
+		$sql = "UPDATE ".MAIN_DB_PREFIX."dolibarrassistant_conversation SET subject='CreateBill2' where rowid=$conversation_id";
+		$resql = $db->query($sql);
+	}
+	else if ($conversation_subject=='CreateBill2')
+	{
+		$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_messages VALUES (NULL, $conversation_id, '".$langs->trans('AnythingElse')."', 1);";
+		$resql = $db->query($sql);
+		$sql = "UPDATE ".MAIN_DB_PREFIX."dolibarrassistant_conversation SET subject='CreateBill3' where rowid=$conversation_id";
+		$resql = $db->query($sql);
+	}
 	
 	
+}
+else if ($text=="reset")
+{
+	$sql = "UPDATE ".MAIN_DB_PREFIX."dolibarrassistant_conversation SET finished=1 where rowid=$conversation_id";
+	$resql = $db->query($sql);
+	$conversation_id=0; // force no queries in sql query
 }
 
 /*

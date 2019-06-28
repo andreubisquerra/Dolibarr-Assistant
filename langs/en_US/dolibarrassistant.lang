@@ -15,3 +15,5 @@
 
 IamAssistant=Hi <b>%s</b>, I'm the Dolibarr Assistant. How can I help you?
 WhatCustomer=What customer?
+WhatProduct=What products do you want to add to the invoice?
+AnythingElse=Anything Else?

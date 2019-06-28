@@ -15,3 +15,5 @@
 
 IamAssistant=Hola <b>%s</b>, Soy el asistente de Dolibarr. Como te puedo ayudar?
 WhatCustomer=A que cliente?
+WhatProduct=Que productos deseas añadir a la factura?
+AnythingElse=Algo más?

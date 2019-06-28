@@ -130,4 +130,77 @@ else if ($conversation_subject=="CreateBill")
 	    echo json_encode(array('nom'=>'Error','label'=>'Error','key'=>'Error','value'=>'Error'));
 	}	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+else if ($conversation_subject=="CreateBill2")
+{
+	$return_arr = array();
+	$sql = "SELECT *";
+	$sql.= " FROM ".MAIN_DB_PREFIX."product as p";
+	$sql.= " WHERE p.entity IN (".getEntity('societe').")";
+	$resql=$db->query($sql);
+	if ($resql)
+	{
+		while ($row = $db->fetch_array($resql))
+		{
+			$label=$row['label'];
+			$row_array['label'] = $label;
+			$row_array['value'] = $row['label'];
+	        $row_array['key'] = $row['rowid'];
+
+	        array_push($return_arr, $row_array);
+	    }
+
+	    echo json_encode($return_arr);
+	}
+}
+
+
+
+
+
+
+
+else if ($conversation_subject=="CreateBill3")
+{
+	$return_arr = array();
+	$row_array['label'] = "No";
+	$row_array['value'] = "No";
+	$row_array['key'] = $row['rowid'];
+	array_push($return_arr, $row_array);
+	
+	$sql = "SELECT *";
+	$sql.= " FROM ".MAIN_DB_PREFIX."product as p";
+	$sql.= " WHERE p.entity IN (".getEntity('societe').")";
+	$resql=$db->query($sql);
+	if ($resql)
+	{
+		while ($row = $db->fetch_array($resql))
+		{
+			$label=$row['label'];
+			$row_array['label'] = $label;
+			$row_array['value'] = $row['label'];
+	        $row_array['key'] = $row['rowid'];
+
+	        array_push($return_arr, $row_array);
+	    }
+
+	    echo json_encode($return_arr);
+	}
+}
 	
