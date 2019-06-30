@@ -54,7 +54,7 @@ if($resql){
 // Create new one if necesary
 if ($conversation_id<1)
 {
-	$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_conversation VALUES (NULL, NULL, '', 0);";
+	$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_conversation VALUES (NULL, NULL, '', '', NULL, NULL, 0);";
 	$resql = $db->query($sql);
 	$conversation_id=1;
 	
@@ -70,6 +70,7 @@ if ($conversation_id<1)
 // If text writted, add to conversation
 if ($text!="" and $text!="reset")
 {
+	// Save user text to the conversation
 	$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_messages VALUES (NULL, $conversation_id, '$text', 0);";
 	$resql = $db->query($sql);
 	
@@ -80,46 +81,90 @@ if ($text!="" and $text!="reset")
 		{
 			$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_messages VALUES (NULL, $conversation_id, '".$langs->trans('WhatCustomer')."', 1);";
 			$resql = $db->query($sql);
-			$sql = "UPDATE ".MAIN_DB_PREFIX."dolibarrassistant_conversation SET subject='CreateBill' where rowid=$conversation_id";
+			$sql = "UPDATE ".MAIN_DB_PREFIX."dolibarrassistant_conversation SET subject='CreateBill', question='WhatCustomer' where rowid=$conversation_id";
 			$resql = $db->query($sql);
 		}
 	}
 	else if ($conversation_subject=='CreateBill')
 	{
-		$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_messages VALUES (NULL, $conversation_id, '".$langs->trans('WhatProduct')."', 1);";
-		$resql = $db->query($sql);
-		$sql = "UPDATE ".MAIN_DB_PREFIX."dolibarrassistant_conversation SET subject='CreateBill2' where rowid=$conversation_id";
-		$resql = $db->query($sql);
+		if ($obj->question=="WhatCustomer")
+		{
+			$sql="SELECT rowid FROM ".MAIN_DB_PREFIX."societe";
+			$sql.=" WHERE nom LIKE '%".$text."%'";
+			$resql=$db->query($sql);
+			$obj=$db->fetch_object($resql);
+			if ($obj->rowid>0)
+			{
+				$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_messages VALUES (NULL, $conversation_id, '".$langs->trans('WhatProduct')."', 1);";
+				$resql = $db->query($sql);
+				$sql = "UPDATE ".MAIN_DB_PREFIX."dolibarrassistant_conversation SET question='WhatProduct', fk_soc=".$obj->rowid." where rowid=$conversation_id";
+				$resql = $db->query($sql);
+			}
+			else
+			{
+				$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_messages VALUES (NULL, $conversation_id, '".$langs->trans('CustomerNotFound')."', 1);";
+				$resql = $db->query($sql);
+				$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_messages VALUES (NULL, $conversation_id, '".$langs->trans('WhatCustomer')."', 1);";
+				$resql = $db->query($sql);
+			}
+		}
+
+		
+		else if ($obj->question=="WhatProduct")
+		{
+			$sql="SELECT rowid FROM ".MAIN_DB_PREFIX."product";
+			$sql.=" WHERE label LIKE '%".$text."%'";
+			$resql=$db->query($sql);
+			$obj=$db->fetch_object($resql);
+			if ($obj->rowid>0)
+			{
+				$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_messages VALUES (NULL, $conversation_id, '".$langs->trans('AnythingElse')."', 1);";
+				$resql = $db->query($sql);
+				$sql = "UPDATE ".MAIN_DB_PREFIX."dolibarrassistant_conversation SET question='AnythingElse' where rowid=$conversation_id";
+				$resql = $db->query($sql);
+			}
+			else
+			{
+				$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_messages VALUES (NULL, $conversation_id, '".$langs->trans('ProductNotFound')."', 1);";
+				$resql = $db->query($sql);
+				$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_messages VALUES (NULL, $conversation_id, '".$langs->trans('WhatProduct')."', 1);";
+				$resql = $db->query($sql);
+			}
+		}
+		
+		
+		else if ($obj->question=="AnythingElse")
+		{
+			$sql="SELECT rowid FROM ".MAIN_DB_PREFIX."product";
+			$sql.=" WHERE label LIKE '%".$text."%'";
+			$resql=$db->query($sql);
+			$obj=$db->fetch_object($resql);
+			if ($obj->rowid>0)
+			{
+				$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_messages VALUES (NULL, $conversation_id, '".$langs->trans('AnythingElse')."', 1);";
+				$resql = $db->query($sql);
+			}
+			else
+			{
+				$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_messages VALUES (NULL, $conversation_id, '".$langs->trans('ProductNotFound')."', 1);";
+				$resql = $db->query($sql);
+				$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_messages VALUES (NULL, $conversation_id, '".$langs->trans('WhatProduct')."', 1);";
+				$resql = $db->query($sql);
+			}
+		}
+		
 	}
-	else if ($conversation_subject=='CreateBill2')
-	{
-		$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_messages VALUES (NULL, $conversation_id, '".$langs->trans('AnythingElse')."', 1);";
-		$resql = $db->query($sql);
-		$sql = "UPDATE ".MAIN_DB_PREFIX."dolibarrassistant_conversation SET subject='CreateBill3' where rowid=$conversation_id";
-		$resql = $db->query($sql);
-	}
-	
 	
 }
 else if ($text=="reset")
 {
 	$sql = "UPDATE ".MAIN_DB_PREFIX."dolibarrassistant_conversation SET finished=1 where rowid=$conversation_id";
 	$resql = $db->query($sql);
-	$conversation_id=0; // force no queries in sql query
+	$conversation_id=0;
 }
 
-/*
- * Actions
- */
 
  
-
- 
- /*
- * Chat view
- */
- 
-// Style from https://css-tricks.com/replicating-google-hangouts-chat/
 ?>
 <style>
 HTML  CSS Result

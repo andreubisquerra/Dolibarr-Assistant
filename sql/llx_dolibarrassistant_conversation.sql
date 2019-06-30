@@ -17,6 +17,9 @@
 CREATE TABLE llx_dolibarrassistant_conversation(
 	rowid integer AUTO_INCREMENT PRIMARY KEY NOT NULL, 
 	fk_user integer,
-	subject varchar(255),	
+	subject varchar(255),
+	question varchar(255),
+	fk_soc integer,
+	fk_invoice integer,
 	finished integer
 ) ENGINE=innodb;

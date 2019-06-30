@@ -54,6 +54,7 @@ $resql = $db->query($sql);
 if($resql){
 	$obj = $db->fetch_object($resql);
 	$conversation_subject=$obj->subject;
+	$question=$obj->question;
 }
 
 if ($conversation_subject=="")
@@ -73,7 +74,7 @@ if ($conversation_subject=="")
 
 
 
-else if ($conversation_subject=="CreateBill")
+else if ($question=="WhatCustomer")
 {
 	
 	$return_arr = array();
@@ -147,7 +148,7 @@ else if ($conversation_subject=="CreateBill")
 
 
 
-else if ($conversation_subject=="CreateBill2")
+else if ($question=="WhatProduct")
 {
 	$return_arr = array();
 	$sql = "SELECT *";
@@ -176,7 +177,7 @@ else if ($conversation_subject=="CreateBill2")
 
 
 
-else if ($conversation_subject=="CreateBill3")
+else if ($question=="AnythingElse")
 {
 	$return_arr = array();
 	$row_array['label'] = "No";

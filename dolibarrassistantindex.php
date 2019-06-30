@@ -114,7 +114,7 @@ function sendtochat() {
 <?php
 $htmlname="usertext";
 $name="";
-print '<input type="text" size="38" id="search_'.$htmlname.'" name="search_'.$htmlname.'" value="'.$name.'" />';
+print '<input type="text" size="36" id="search_'.$htmlname.'" name="search_'.$htmlname.'" value="'.$name.'" />';
 print ajax_autocompleter(0, $htmlname, 'ajax.php', '', 2, 0);
 print '<button onclick="sendtochat();">'.$langs->trans("OK").'</button>';
 print '</div><div class="fichetwothirdright"><div class="ficheaddleft">';
