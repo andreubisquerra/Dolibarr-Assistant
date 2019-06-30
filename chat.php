@@ -95,9 +95,17 @@ if ($text!="" and $text!="reset")
 			$obj=$db->fetch_object($resql);
 			if ($obj->rowid>0)
 			{
+				//Create invoice
+				require_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facture.class.php';
+				$invoice = new Facture($db);
+				$invoice->socid=$obj->rowid;
+				$invoice->date = dol_now();
+				$invoiceid = $invoice->create($user);
+				echo "placeid".$placeid;
+				//End Create invoice
 				$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_messages VALUES (NULL, $conversation_id, '".$langs->trans('WhatProduct')."', 1);";
 				$resql = $db->query($sql);
-				$sql = "UPDATE ".MAIN_DB_PREFIX."dolibarrassistant_conversation SET question='WhatProduct', fk_soc=".$obj->rowid." where rowid=$conversation_id";
+				$sql = "UPDATE ".MAIN_DB_PREFIX."dolibarrassistant_conversation SET question='WhatProduct', fk_soc=".$obj->rowid.", fk_invoice=".$invoiceid." where rowid=$conversation_id";
 				$resql = $db->query($sql);
 			}
 			else
@@ -110,14 +118,34 @@ if ($text!="" and $text!="reset")
 		}
 
 		
-		else if ($obj->question=="WhatProduct")
+		else if ($obj->question=="AnythingElse" and $text="No, ".$langs->trans('Validate'))
+		{
+			require_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facture.class.php';
+			$invoice = new Facture($db);
+			$invoice->fetch($obj->fk_invoice);
+			$invoice->validate($user);
+			$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_messages VALUES (NULL, $conversation_id, '".$invoice->ref." ".$langs->trans('Validated')."', 1);";
+			$resql = $db->query($sql);
+		}
+		
+		else if ($obj->question=="WhatProduct" or $obj->question=="AnythingElse")
 		{
 			$sql="SELECT rowid FROM ".MAIN_DB_PREFIX."product";
 			$sql.=" WHERE label LIKE '%".$text."%'";
 			$resql=$db->query($sql);
-			$obj=$db->fetch_object($resql);
-			if ($obj->rowid>0)
+			$obj_prod=$db->fetch_object($resql);
+			if ($obj_prod->rowid>0)
 			{
+				require_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facture.class.php';
+				$invoice = new Facture($db);
+				$invoice->fetch($obj->fk_invoice);
+				$prod = new Product($db);
+				$prod->fetch($obj_prod->rowid);
+				$price = $prod->price;
+				$tva_tx = $prod->tva_tx;
+				$price_ttc = $prod->price_ttc;
+				$price_base_type = $prod->price_base_type;
+				$idoflineadded = $invoice->addline($prod->description, $price, 1, $tva_tx, $prod->localtax1_tx, $prod->localtax2_tx, $idproduct, $prod->remise_percent, '', 0, 0, 0, '', $price_base_type, $price_ttc, $prod->type, -1, 0, '', 0, 0, null, 0, '', 0, 100, '', null, 0);
 				$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_messages VALUES (NULL, $conversation_id, '".$langs->trans('AnythingElse')."', 1);";
 				$resql = $db->query($sql);
 				$sql = "UPDATE ".MAIN_DB_PREFIX."dolibarrassistant_conversation SET question='AnythingElse' where rowid=$conversation_id";
@@ -132,26 +160,6 @@ if ($text!="" and $text!="reset")
 			}
 		}
 		
-		
-		else if ($obj->question=="AnythingElse")
-		{
-			$sql="SELECT rowid FROM ".MAIN_DB_PREFIX."product";
-			$sql.=" WHERE label LIKE '%".$text."%'";
-			$resql=$db->query($sql);
-			$obj=$db->fetch_object($resql);
-			if ($obj->rowid>0)
-			{
-				$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_messages VALUES (NULL, $conversation_id, '".$langs->trans('AnythingElse')."', 1);";
-				$resql = $db->query($sql);
-			}
-			else
-			{
-				$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_messages VALUES (NULL, $conversation_id, '".$langs->trans('ProductNotFound')."', 1);";
-				$resql = $db->query($sql);
-				$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_messages VALUES (NULL, $conversation_id, '".$langs->trans('WhatProduct')."', 1);";
-				$resql = $db->query($sql);
-			}
-		}
 		
 	}
 	

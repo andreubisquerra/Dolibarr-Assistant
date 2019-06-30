@@ -32,6 +32,8 @@ if (! defined('NOCSRFCHECK'))    define('NOCSRFCHECK', '1');
 
 require '../../main.inc.php';
 
+$langs->loadLangs(array("bills", "dolibarrassistant@dolibarrassistant"));
+
 
 /*
  * View
@@ -60,8 +62,8 @@ if($resql){
 if ($conversation_subject=="")
 {
 	$return_arr = array();
-	$row_array['label'] = "Crear factura";
-	$row_array['value'] = "Crear factura";
+	$row_array['label'] = $langs->trans('CreateBill');
+	$row_array['value'] = $langs->trans('CreateBill');
 	$row_array['key'] = 1;
 
 	array_push($return_arr, $row_array);
@@ -180,8 +182,8 @@ else if ($question=="WhatProduct")
 else if ($question=="AnythingElse")
 {
 	$return_arr = array();
-	$row_array['label'] = "No";
-	$row_array['value'] = "No";
+	$row_array['label'] = "No, ".$langs->trans('Validate');
+	$row_array['value'] = "No, ".$langs->trans('Validate');
 	$row_array['key'] = $row['rowid'];
 	array_push($return_arr, $row_array);
 	
