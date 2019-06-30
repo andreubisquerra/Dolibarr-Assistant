@@ -19,3 +19,4 @@ WhatProduct=Que productos deseas añadir a la factura?
 AnythingElse=Algo más?
 CustomerNotFound=No se ha encontrado ningún cliente con este nombre
 ProductNotFound=No se ha encontrado ningún producto con este nombre
+AnythingElse=Necesitas algo más?

@@ -13,36 +13,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#
-# Générique
-#
-
-# Module label 'ModuleDolibarrAssistantName'
-ModuleDolibarrAssistantName = DolibarrAssistant
-# Module description 'ModuleDolibarrAssistantDesc'
-ModuleDolibarrAssistantDesc = Description de DolibarrAssistant
-
-#
-# Page d'administration
-#
-DolibarrAssistantSetup = Configuration du module DolibarrAssistant
-Settings = Réglages
-DolibarrAssistantSetupPage = Page de configuration du module DolibarrAssistant
-
-#
-# Page À propos
-#
-About = À propos
-DolibarrAssistantAbout = À propos de DolibarrAssistant
-DolibarrAssistantAboutPage = Page à propos de DolibarrAssistant
-
-#
-# Page d'exemple
-#
-MyPageName = Nom de ma page
-
-#
-# Box d'exemple
-#
-MyWidget = Mon widget
-MyWidgetDescription = Description de mon widget
+IamAssistant=Salut <b>%s</b>, Je suis l'assistant de Dolibarr. Comment puis-je vous aider?
+WhatCustomer=Quel client?
+WhatProduct=Quels produits voulez-vous ajouter à la facture?
+AnythingElse=Rien d'autre?
+CustomerNotFound=Aucun client trouvé avec ce nom
+ProductNotFound=Aucun produit trouvé avec ce nom
+AnythingElse=As-tu besoin d'autre chose?

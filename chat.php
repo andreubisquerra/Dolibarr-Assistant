@@ -101,7 +101,6 @@ if ($text!="" and $text!="reset")
 				$invoice->socid=$obj->rowid;
 				$invoice->date = dol_now();
 				$invoiceid = $invoice->create($user);
-				echo "placeid".$placeid;
 				//End Create invoice
 				$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_messages VALUES (NULL, $conversation_id, '".$langs->trans('WhatProduct')."', 1);";
 				$resql = $db->query($sql);
@@ -118,13 +117,15 @@ if ($text!="" and $text!="reset")
 		}
 
 		
-		else if ($obj->question=="AnythingElse" and $text="No, ".$langs->trans('Validate'))
+		else if ($obj->question=="AnythingElse" and $text=="No, ".$langs->trans('Validate'))
 		{
 			require_once DOL_DOCUMENT_ROOT . '/compta/facture/class/facture.class.php';
 			$invoice = new Facture($db);
 			$invoice->fetch($obj->fk_invoice);
 			$invoice->validate($user);
 			$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_messages VALUES (NULL, $conversation_id, '".$invoice->ref." ".$langs->trans('Validated')."', 1);";
+			$resql = $db->query($sql);
+			$sql = "INSERT INTO ".MAIN_DB_PREFIX."dolibarrassistant_messages VALUES (NULL, $conversation_id, '".$langs->trans('NeedAnythingElse')."', 1);";
 			$resql = $db->query($sql);
 		}
 		
@@ -164,7 +165,8 @@ if ($text!="" and $text!="reset")
 	}
 	
 }
-else if ($text=="reset")
+
+if ($text=="reset")
 {
 	$sql = "UPDATE ".MAIN_DB_PREFIX."dolibarrassistant_conversation SET finished=1 where rowid=$conversation_id";
 	$resql = $db->query($sql);

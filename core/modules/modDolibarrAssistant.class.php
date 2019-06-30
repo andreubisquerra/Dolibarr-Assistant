@@ -45,7 +45,7 @@ class modDolibarrAssistant extends DolibarrModules
 
         // Id for module (must be unique).
         // Use here a free id (See in Home -> System information -> Dolibarr for list of used modules id).
-        $this->numero = 500000; // TODO Go on page https://wiki.dolibarr.org/index.php/List_of_modules_id to reserve an id number for your module
+        $this->numero = 449810; // TODO Go on page https://wiki.dolibarr.org/index.php/List_of_modules_id to reserve an id number for your module
         // Key text used to identify module (for permissions, menus, etc...)
         $this->rights_class = 'dolibarrassistant';
         // Family can be 'base' (core modules),'crm','financial','hr','projects','products','ecm','technic' (transverse modules),'interface' (link with external tools),'other','...'
@@ -58,13 +58,13 @@ class modDolibarrAssistant extends DolibarrModules
         // Module label (no space allowed), used if translation string 'ModuleDolibarrAssistantName' not found (DolibarrAssistant is name of module).
         $this->name = preg_replace('/^mod/i', '', get_class($this));
         // Module description, used if translation string 'ModuleDolibarrAssistantDesc' not found (DolibarrAssistant is name of module).
-        $this->description = "DolibarrAssistantDescription";
+        $this->description = "Dolibarr Assistant";
         // Used only if file README.md and README-LL.md not found.
-        $this->descriptionlong = "DolibarrAssistant description (Long)";
-        $this->editor_name = 'Editor name';
-        $this->editor_url = 'https://www.example.com';
+        $this->descriptionlong = "Dolibarr Assistant";
+        $this->editor_name = 'Andreu Bisquerra';
+        $this->editor_url = 'https://www.takepos.com';
         // Possible values for version are: 'development', 'experimental', 'dolibarr', 'dolibarr_deprecated' or a version string like 'x.y.z'
-        $this->version = '1.0';
+        $this->version = '9.0';
         // Url to the file with your last numberversion of this module
         //$this->url_last_version = 'http://www.example.com/versionmodule.txt';
 
@@ -73,7 +73,7 @@ class modDolibarrAssistant extends DolibarrModules
         // Name of image file used for this module.
         // If file is in theme/yourtheme/img directory under name object_pictovalue.png, use this->picto='pictovalue'
         // If file is in module/img directory under name object_pictovalue.png, use this->picto='pictovalue@module'
-        $this->picto='generic';
+        $this->picto='phoning_mobile';
         // Define some features supported by module (triggers, login, substitutions, menus, css, etc...)
         $this->module_parts = array(
             // Set this to 1 if module has its own trigger directory (core/triggers)
@@ -243,7 +243,7 @@ class modDolibarrAssistant extends DolibarrModules
         $this->rights = array();
         $r=0;
         // Add here entries to declare new permissions
-        /* BEGIN MODULEBUILDER PERMISSIONS */
+        /* BEGIN MODULEBUILDER PERMISSIONS 
         $this->rights[$r][0] = $this->numero + $r;	// Permission id (must not be already used)
         $this->rights[$r][1] = 'Read objects of DolibarrAssistant';	// Permission label
         $this->rights[$r][4] = 'read';				// In php code, permission will be checked by test if ($user->rights->dolibarrassistant->level1->level2)
@@ -312,34 +312,7 @@ class modDolibarrAssistant extends DolibarrModules
         );
         */
 
-		$this->menu[$r++]=array(
-                				'fk_menu'=>'fk_mainmenu=dolibarrassistant',	    // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
-								'type'=>'left',			                // This is a Left menu entry
-								'titre'=>'List assistantlog',
-								'mainmenu'=>'dolibarrassistant',
-								'leftmenu'=>'dolibarrassistant_assistantlog',
-								'url'=>'/dolibarrassistant/assistantlog_list.php',
-								'langs'=>'dolibarrassistant@dolibarrassistant',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
-								'position'=>1100+$r,
-								'enabled'=>'$conf->dolibarrassistant->enabled',  // Define condition to show or hide menu entry. Use '$conf->dolibarrassistant->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
-								'perms'=>'1',			                // Use 'perms'=>'$user->rights->dolibarrassistant->level1->level2' if you want your menu with a permission rules
-								'target'=>'',
-								'user'=>2);				                // 0=Menu for internal users, 1=external users, 2=both
-		$this->menu[$r++]=array(
-                				'fk_menu'=>'fk_mainmenu=dolibarrassistant,fk_leftmenu=dolibarrassistant_assistantlog',	    // '' if this is a top menu. For left menu, use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode
-								'type'=>'left',			                // This is a Left menu entry
-								'titre'=>'New assistantlog',
-								'mainmenu'=>'dolibarrassistant',
-								'leftmenu'=>'dolibarrassistant_assistantlog',
-								'url'=>'/dolibarrassistant/assistantlog_card.php?action=create',
-								'langs'=>'dolibarrassistant@dolibarrassistant',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
-								'position'=>1100+$r,
-								'enabled'=>'$conf->dolibarrassistant->enabled',  // Define condition to show or hide menu entry. Use '$conf->dolibarrassistant->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
-								'perms'=>'1',			                // Use 'perms'=>'$user->rights->dolibarrassistant->level1->level2' if you want your menu with a permission rules
-								'target'=>'',
-								'user'=>2);				                // 0=Menu for internal users, 1=external users, 2=both
-               		
-		/* END MODULEBUILDER LEFTMENU ASSISTANTLOG */
+
 
         // Exports profiles provided by this module
         $r=1;

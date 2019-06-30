@@ -49,7 +49,7 @@ $action=GETPOST('action', 'alpha');
 
 
 // Securite acces client
-if (! $user->rights->dolibarrassistant->read) accessforbidden();
+//if (! $user->rights->dolibarrassistant->read) accessforbidden();
 $socid=GETPOST('socid', 'int');
 if (isset($user->societe_id) && $user->societe_id > 0)
 {
